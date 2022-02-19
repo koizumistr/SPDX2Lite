@@ -1,0 +1,28 @@
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+DocumentNamespace: http://12d80901a827/repo/SPDX2TV_bc-1.06-r3-patched.tar.gz_1551072283.spdx
+DocumentName: /srv/fossology/repository/report
+SPDXID: SPDXRef-DOCUMENT
+Creator: meta-spdxscanner
+Creator: meta-spdxscanner
+Created: 2019-02-25T05:24:47Z
+
+PackageName: bc
+PackageVersion: 1.06
+PackageFileName: bc-1.06-r3-patched.tar.gz
+SPDXID: SPDXRef-upload312
+PackageDownloadLocation: http://ftp.gnu.org/gnu/bc/bc-1.06.tar.gz
+PackageHomePage: http://www.gnu.org/software/bc/bc.html
+PackageLicenseConcluded: LicenseRef-Bison-exception
+PackageLicenseDeclared: LicenseRef-GNU-Manpages
+PackageLicenseComments: <text> licenseInfoInFile determined by Scanners:
+ - nomos ("unknown".e84fd3) - monk ("unknown".e84fd3) </text>
+PackageCopyrightText: NOASSERTION
+
+LicenseID: LicenseRef-Bison-exception
+LicenseName: Bison-exception
+ExtractedText: <text> License by Nomos. </text>
+
+LicenseID: LicenseRef-GNU-Manpages
+LicenseName: GNU-Manpages
+ExtractedText: <text> License by Nomos. </text>
