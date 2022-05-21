@@ -15,7 +15,7 @@ opt.parse!(ARGV, into: params)
 #p params
 
 if ARGV.length != 1
-  puts "Usage: SPDX2SPDXlite.rb [-x OUTPUTFILE] [-n PAD] YOURSPDXFILE"
+  puts "Usage: SPDX2Lite.rb [-x OUTPUTFILE] [-n PAD] YOURSPDXFILE"
   exit(false)
 end
 
