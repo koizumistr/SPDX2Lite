@@ -7,16 +7,23 @@ require 'optparse'
 
 params = {}
 opt = OptionParser.new
-opt.on('-x VAL') # { |v| p v }
-opt.on('-n pad') # { |v| p v }
+opt.version = [1, 2]
+opt.banner = "Usage: SPDX2Lite.rb [option] YOURSPDXFILE"
+opt.on('-x OUTPUTFILE', 'output xlsx file') # { |v| p v }
+opt.on('-n PAD', 'define padding character(s)') # { |v| p v }
 
-opt.parse!(ARGV, into: params)
+begin
+  opt.parse!(ARGV, into: params)
 #p ARGV
 #p params
+rescue
+  puts opt.help
+  exit(-1)
+end
 
 if ARGV.length != 1
-  puts "Usage: SPDX2Lite.rb [-x OUTPUTFILE] [-n PAD] YOURSPDXFILE"
-  exit(false)
+  puts opt.help
+  exit(-2)
 end
 
 f = File.open(ARGV[0])
