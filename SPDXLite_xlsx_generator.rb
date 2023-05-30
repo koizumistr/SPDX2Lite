@@ -113,73 +113,73 @@ class SPDXLiteXlsxGenerator < SPDXLiteGenerator
                         'Any other sub-tags',
                         nil, nil, nil, nil
                        ], style: title
-    @col = Hash.new
+    @col = {}
   end
 
   def make_empty_row
-    row = Array.new
+    row = []
     5.times { row.push(@nd) }
     row.push('true')
     14.times { row.push(@nd) }
-    return row
+    row
   end
 
   def fill_value(context, tag, value)
-    if SPDXLitefield.find {|s| s == tag} != nil
-      case context
-      when 'document creation'
-        if DCIfield.find {|d| d == tag} != nil
-          if @col[tag].nil?
-            @col[tag] = value
+    return if SPDXLitefield.find { |s| s == tag }.nil?
+
+    case context
+    when 'document creation'
+      if DCIfield.find { |d| d == tag } != nil
+        if @col[tag].nil?
+          @col[tag] = value
+        else
+          @col[tag] = @col[tag] + "\n" + value
+        end
+      end
+    when 'package'
+      if (idx = Packagefield.find_index { |d| d == tag }) != nil
+        if tag == 'PackageName'
+          if @row.nil?
+            @sheet_dci.add_row ['SPDX Version', @col['SPDXVersion']]
+            @sheet_dci.add_row ['Data License', @col['DataLicense']]
+            @sheet_dci.add_row ['SPDX Identifier', @col['SPDXID']]
+            @sheet_dci.add_row ['Document Name', @col['DocumentName']]
+            @sheet_dci.add_row ['SPDX Document Namespace', @col['DocumentNamespace']]
+            @sheet_dci.add_row ['Creator', @col['Creator']]
+#              @sheet_dci.add_row ['Created', @col['Created']], style: [nil, @datestyle]
+            @sheet_dci.add_row ['Created', @col['Created']]
           else
-            @col[tag] = @col[tag] + "\n" + value
-          end
-        end
-      when 'package'
-        if (idx = Packagefield.find_index {|d| d == tag}) != nil
-          if tag == "PackageName"
-            if @row.nil?
-              @sheet_dci.add_row ["SPDX Version", @col['SPDXVersion']]
-              @sheet_dci.add_row ["Data License", @col['DataLicense']]
-              @sheet_dci.add_row ["SPDX Identifier", @col['SPDXID']]
-              @sheet_dci.add_row ["Document Name", @col['DocumentName']]
-              @sheet_dci.add_row ["SPDX Document Namespace", @col['DocumentNamespace']]
-              @sheet_dci.add_row ["Creator", @col['Creator']]
-#              @sheet_dci.add_row ["Created", @col['Created']], style: [nil, @datestyle]
-              @sheet_dci.add_row ["Created", @col['Created']]
-            else
-              @sheet_pkg.add_row @row
-            end
-            @row = make_empty_row
-          end
-          @row[idx] = value
-#          p @row
-          if tag == 'PackageLicenseConcluded'
-            if value.include? 'LicenseRef-'
-              @license_concluded = value
-            end
-          end
-          if tag == 'PackageLicenseDeclared'
-            if value.include? 'LicenseRef-'
-              @license_decleared = value
-            end
-          end
-        end
-      when 'none'
-#        p context, tag, value
-        if tag == "LicenseID"
-          if (@license_decleared == value || @license_concluded == value)
-            @output = true
             @sheet_pkg.add_row @row
-            @row = make_empty_row
-          else
-            @output = false
+          end
+          @row = make_empty_row
+        end
+        @row[idx] = value
+#          p @row
+        if tag == 'PackageLicenseConcluded'
+          if value.include? 'LicenseRef-'
+            @license_concluded = value
           end
         end
-        if @output
-          @row[ExtraLicensefield.find_index {|d| d == tag} + Packagefield.length + 4] = value
-          @row[5] = @nd
+        if tag == 'PackageLicenseDeclared'
+          if value.include? 'LicenseRef-'
+            @license_decleared = value
+          end
         end
+      end
+    when 'none'
+#        p context, tag, value
+      if tag == 'LicenseID'
+        if @license_decleared == value || @license_concluded == value
+          @output = true
+          @sheet_pkg.add_row @row
+          @row = make_empty_row
+        else
+          @output = false
+        end
+      end
+      if @output
+        @row[ExtraLicensefield.find_index { |d| d == tag } + Packagefield.length + 4] = value
+        @row[5] = @nd
       end
     end
   end

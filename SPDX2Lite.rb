@@ -8,7 +8,7 @@ require 'optparse'
 params = {}
 opt = OptionParser.new
 opt.version = [1, 2]
-opt.banner = "Usage: SPDX2Lite.rb [option] YOURSPDXFILE"
+opt.banner = 'Usage: SPDX2Lite.rb [option] YOURSPDXFILE'
 opt.on('-x OUTPUTFILE', 'output xlsx file') # { |v| p v }
 opt.on('-n PAD', 'define padding character(s)') # { |v| p v }
 
@@ -28,13 +28,13 @@ end
 
 f = File.open(ARGV[0])
 parser = SPDXParser.new(f)
-if not params[:x].nil?
-  if File.extname(params[:x]) == ""
-    filename = params[:x] + ".xlsx"
+if !params[:x].nil?
+  if File.extname(params[:x]) == ''
+    filename = params[:x] + '.xlsx'
   else
     filename = params[:x]
   end
-  if not params[:n].nil?
+  if !params[:n].nil?
     pad = params[:n]
   else
     pad = '-'
@@ -43,7 +43,6 @@ if not params[:x].nil?
 else
   g = SPDXLiteTagValueGenerator.new
 end
-until parser.parse.nil? do
-  g.fill_value(parser.context, parser.tag, parser.value)
-end
+
+g.fill_value(parser.context, parser.tag, parser.value) until parser.parse.nil?
 g.finalize
