@@ -1,0 +1,6 @@
+test.spdxを入力にして実行すると
+- Tag Value形式ならresult.txtが
+- xlsx形式ならresult.xlsが
+出力されます。
+
+result_old.xlsxなんてものもありますが、普通の人は気にしなくていいと思います。以前のresult.xlsxでして、caxlsx gemではなくaxlsx gemを使っていたときにはxlsx形式ではこれが出力されていました。result.xlsxとはCreatedのところが違いますが、result.xlsxの方が期待していた出力です。おそらくaxlsx gemのバグ/制限事項がcaxlsx gemで解消されたのではないかと。（axlsx gem使用当時に「Createdがこうなるのは制限事項ですよ」とでも書いておけよ > 過去の自分、、、orz）
