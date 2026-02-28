@@ -129,15 +129,15 @@ class SPDXLiteXlsxGenerator < SPDXLiteGenerator
 
     case context
     when 'document creation'
-      if DCIfield.find { |d| d == tag } != nil
+      unless DCIfield.find { |d| d == tag }.nil?
         if @col[tag].nil?
           @col[tag] = value
         else
-          @col[tag] = @col[tag] + "\n" + value
+          @col[tag] = "#{@col[tag]}\n#{value}"
         end
       end
     when 'package'
-      if (idx = Packagefield.find_index { |d| d == tag }) != nil
+      unless (idx = Packagefield.find_index { |d| d == tag }).nil?
         if tag == 'PackageName'
           if @row.nil?
             @sheet_dci.add_row ['SPDX Version', @col['SPDXVersion']]
@@ -155,21 +155,13 @@ class SPDXLiteXlsxGenerator < SPDXLiteGenerator
         end
         @row[idx] = value
 #          p @row
-        if tag == 'PackageLicenseConcluded'
-          if value.include? 'LicenseRef-'
-            @license_concluded = value
-          end
-        end
-        if tag == 'PackageLicenseDeclared'
-          if value.include? 'LicenseRef-'
-            @license_decleared = value
-          end
-        end
+        @license_concluded = value if tag == 'PackageLicenseConcluded' && value.include?('LicenseRef-')
+        @license_decleared = value if tag == 'PackageLicenseDeclared' && value.include?('LicenseRef-')
       end
     when 'none'
 #        p context, tag, value
       if tag == 'LicenseID'
-        if @license_decleared == value || @license_concluded == value
+        if [@license_decleared, @license_concluded].include?(value)
           @output = true
           @sheet_pkg.add_row @row
           @row = make_empty_row

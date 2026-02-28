@@ -32,12 +32,10 @@ class SPDXParser
       @context = 'none'
     end
     @value = item[:value]
-    if item[:value].start_with?('<text>')
-      unless item[:value].end_with?('</text>')
-        @value += "\n" if @value.length > 6
-        @value += $_ until @spdxfile.gets.end_with?("</text>\n")
-        @value = @value.chomp + $_.chomp
-      end
+    if item[:value].start_with?('<text>') && !item[:value].end_with?('</text>')
+      @value += "\n" if @value.length > 6
+      @value += $_ until @spdxfile.gets.end_with?("</text>\n")
+      @value = @value.chomp + $_.chomp
     end
     $_
   end

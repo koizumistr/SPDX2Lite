@@ -14,9 +14,10 @@ opt.on('-n PAD', 'define padding character(s)') # { |v| p v }
 
 begin
   opt.parse!(ARGV, into: params)
-#p ARGV
-#p params
-rescue
+# p ARGV
+# p params
+rescue OptionParser::ParseError => e
+  puts "Error: #{e.message}"
   puts opt.help
   exit(-1)
 end
@@ -28,21 +29,21 @@ end
 
 f = File.open(ARGV[0])
 parser = SPDXParser.new(f)
-if !params[:x].nil?
-  if File.extname(params[:x]) == ''
-    filename = params[:x] + '.xlsx'
-  else
-    filename = params[:x]
-  end
-  if !params[:n].nil?
-    pad = params[:n]
-  else
-    pad = '-'
-  end
-  g = SPDXLiteXlsxGenerator.new(filename, pad)
-else
-  g = SPDXLiteTagValueGenerator.new
-end
+g = if !params[:x].nil?
+      filename = if File.extname(params[:x]) == ''
+                   "#{params[:x]}.xlsx"
+                 else
+                   params[:x]
+                 end
+      pad = if !params[:n].nil?
+              params[:n]
+            else
+              '-'
+            end
+      SPDXLiteXlsxGenerator.new(filename, pad)
+    else
+      SPDXLiteTagValueGenerator.new
+    end
 
 g.fill_value(parser.context, parser.tag, parser.value) until parser.parse.nil?
 g.finalize

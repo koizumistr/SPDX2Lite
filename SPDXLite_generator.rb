@@ -22,7 +22,7 @@ class SPDXLiteGenerator
     'LicenseID',	#	License Identifier
     'ExtractedText',	#	Extracted Text
     'LicenseName',	#	License Name
-    'LicenseComment',	#	License Comment
+    'LicenseComment'	#	License Comment
   ]
 
   def finalize
