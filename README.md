@@ -30,7 +30,7 @@ gem install axlsx
 ~~~
 としてから実行してみたのですが、Ruby 3.xではエラーになりました。Geminiに尋ねたら、そうではなく
 ~~~
-gem install axlsx
+gem install caxlsx
 ~~~
 とせよ、とのことです。理由が知りたい人はGeminiに聞いてください。
 
